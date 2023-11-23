@@ -115,6 +115,18 @@ class TimeDomainData:
         You shall use this function to check whether the the `tf` parameter you have is long enough to ensure C(t) = 0 in the long time limit. 
         """
         self.fig = self.plot_correlation_function(*self.correlation_function)
+        
+    def get_correlation_function(self):
+        return self.correlation_function[1]
+
+    def get_time(self):
+        return self.correlation_function[0]
+
+    def get_n_Hankel(self):
+        return self.n_Hankel
+    
+    def get_tf(self):
+        return self.tf
     
     @staticmethod
     def plot_correlation_function(t, ct):
