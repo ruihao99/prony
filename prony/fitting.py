@@ -2,8 +2,8 @@ import numpy as np
 from scipy import sparse
 from cvxopt import solvers, matrix, spmatrix, mul
 
-import .Hankel
-import .TimeDomainData
+from .Hankel import Hankel
+from .TimeDomainData import TimeDomainData
 
 def numpy_to_cvxopt_matrix(A):
     if A is None:
@@ -103,7 +103,7 @@ def optimize(C, d, A):
         solvers.options[k] = v
     sol = solvers.qp(Q, q.T, A, b, None, None, None, None)
     
-    n_gamma = C.size[1] / 2
+    n_gamma = C.size[1] // 2
     omega_new_temp = np.array(sol['x']).reshape(2, n_gamma) 
     omega_new = omega_new_temp[0,:] + 1.j*omega_new_temp[1,:]
     

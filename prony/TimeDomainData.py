@@ -3,18 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from collections.abc import Callable
-
-def bose_function(energy, beta: float):
-    """calculate the bose function
-
-    Args:
-        energy (float or np.ndarray): the energy
-        beta (float): the inverse temperature
-
-    Returns:
-        float or np.ndarray: the bose function
-    """
-    return 1.0 / (1.0 - np.exp(-energy * beta))
+from .spectral import bose_function
 
 class TimeDomainData:
     """Curiates the time domain data -- the numerical input for Prony fitting
@@ -139,7 +128,6 @@ class TimeDomainData:
         Returns:
             matplotlib.figure.Figure: the figure object for the correlation function
         """
-        t, ct = td_data.correlation_function
         fig = plt.figure(dpi=200)
         ax = fig.gca()
 
