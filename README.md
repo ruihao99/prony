@@ -1,7 +1,7 @@
 prony
 ==============================
 
-Spectral function decomposition using time domain prony fitting
+Spectral function decomposition using time domain prony fitting. 
 
 Project Organization
 ------------
@@ -33,8 +33,11 @@ Project Organization
 
 
 --------
+Credits:
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>.</p>
+
+The original `prony` code was developed by czh and it is available as an subproject of the [`moscal2.0`](https://git.lug.ustc.edu.cn/czh123/moscal2.0) package.
 
 
 Set up
