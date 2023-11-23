@@ -72,7 +72,7 @@ class TimeDomainData:
         Returns:
             (np.ndarray, np.ndarray): tuple of frequencies and corresponding spectral function
         """
-        w = np.linspace(0, self.max_freq_in_pi, self.n_sample+1)[:-1]
+        w = np.linspace(0, self.max_freq_in_pi*np.pi, self.n_sample+1)[:-1]
         jw = spectral_function(w)
         
         return (w, jw)
