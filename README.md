@@ -40,14 +40,7 @@ Project Organization
 Set up
 ------------
 
-Install the virtual environment with conda and activate it:
-
-```bash
-$ conda env create -f environment.yml
-$ conda activate example-project 
-```
-
-Install `prony` in the virtual environment:
+Easiy install `prony` to your python environment:
 
 ```bash
 $ pip install --editable .
