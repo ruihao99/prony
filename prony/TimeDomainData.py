@@ -27,7 +27,7 @@ class TimeDomainData:
     ):
     # even-space sample of frequency domain data 
     self.n_sample = n_sample
-    self.omega = np.linspace(0, n_freq_in_pi)
+    self.omega = np.linspace(0, n_freq_in_pi, )
 
     # estimate the sample rate:
     self.n_rate = math.floor(n_scale_fft * n_scale/ (4 * n_Hankel))
