@@ -5,7 +5,7 @@ using Plots
 """
     TimeDomainData
 
-DOCSTRING
+A structure curates the sampling of time domain correlation function data
 
 # Fields:
 - `n_sample::Int`: number of frequency domain samples
@@ -33,7 +33,7 @@ end
 """
     TimeDomainData(spectral_function::Function, bath_statistic_function::Function, β::Float64, μ::Float64=0.0, tf::Integer = 200, n_Hankel::Integer = 2000, n_sample::Integer = 1000000, max_freq_in_pi::Integer = 3000)
 
-DOCSTRING
+The constructor for TimeDomainData
 
 # Arguments:
 - `spectral_function`: The spectral function
@@ -48,7 +48,7 @@ DOCSTRING
 function TimeDomainData(
     spectral_function::Function, 
     bath_statistic_function::Function,
-    β::Float64, 
+    β::Float64; 
     μ::Float64=0.0,
     tf::Integer=200, 
     # n_Hankel::Integer=2000, 
@@ -86,7 +86,7 @@ end
 """
     plot_correlation_function(t, ct)
 
-DOCSTRING
+A small helper function to visualize the correlation function
 
 # Arguments:
 - `t`: The evenly sampled time
@@ -101,7 +101,7 @@ end
 """
     plot_time_domain_data(data::TimeDomainData)
 
-DOCSTRING
+Plot the time domain correlation function contained in the `TimeDomainData`. 
 
 # Arguments:
 - `data`: The time TimeDomainData struct to organize data

@@ -34,12 +34,12 @@ DOCSTRING
 """
 function get_spectral_function_from_exponentials(ω::Vector, exponents::Vector, η::Vector)
     if length(exponents) != length(η)
-        throw(ArgumentError("Exponents and coefficients must have identical dimensions."))
+        throw(ArgumentError("Exponents and coefficients must have identical dimensions. exp: $(length(exponents)) elements, η: $(length(η)) elements."))
     end
 
-    J_ω = similar(ω, ComplexF64)
+    J_ω = zero(ω)
     for i = eachindex(η)
-        J_ω += @. η[i] / (exponents[i] - 1.0im * w)
+        J_ω += @. η[i] / (exponents[i] - 1.0im * ω)
     end
     return J_ω
 end

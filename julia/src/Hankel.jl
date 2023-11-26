@@ -1,7 +1,5 @@
 using LinearAlgebra
 
-using AutomaticDocstrings
-
 """
     Hankel: simple structure to hold the Hankel matrix data
 
