@@ -1,3 +1,9 @@
+export 
+    bose_function,
+    fermi_function,
+    BO
+
+
 """
     bose_function(E; β::Float64, μ::Float64 = 0.0)
 
@@ -23,7 +29,7 @@ DOCSTRING
 fermi_function(E; β::Float64, μ::Float64=0.0) = 1.0 / (1.0 + exp((E - μ) * β))
 
 """
-    get_spectral_function_from_exponentials(ω, exponent, η)
+    get_correlation_spectra_from_exponentials(ω, exponent, η)
 
 DOCSTRING
 
@@ -32,7 +38,7 @@ DOCSTRING
 - `exponent`: The exponents
 - `η`: the coeffcient
 """
-function get_spectral_function_from_exponentials(ω::Vector, exponents::Vector, η::Vector)
+function get_correlation_spectra_from_exponentials(ω::Vector, exponents::Vector, η::Vector)
     if length(exponents) != length(η)
         throw(ArgumentError("Exponents and coefficients must have identical dimensions. exp: $(length(exponents)) elements, η: $(length(η)) elements."))
     end

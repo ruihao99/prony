@@ -6,8 +6,6 @@ using CVXOPT
 # for logging
 using Printf
 
-using AutomaticDocstrings
-
 """
     get_gammas(Qp::Matrix{ComplexF64}, n_gamma::Int)
 
@@ -271,6 +269,6 @@ function main()
     ω = range(-spe_wid, spe_wid, len_)
 
     jw_exact = @. BO(ω) * bose_function(ω; β=β)
-    jw_prony = real(get_spectral_function_from_exponentials(collect(ω), expn, etal))
+    jw_prony = real(get_correlation_spectra_from_exponentials(collect(ω), expn, etal))
     return ω, jw_exact, jw_prony
 end
