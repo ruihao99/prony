@@ -1,23 +1,36 @@
 import numpy as np
 
-def bose_function(energy, beta: float):
+def bose_function(energy, beta: float, mu: float=0.0):
     """calculate the bose function
 
     Args:
         energy (float or np.ndarray): the energy
         beta (float): the inverse temperature
+        mu (float): the chemical potential. defaults to 0.
 
     Returns:
         float or np.ndarray: the bose function
     """
-    return 1.0 / (1.0 - np.exp(-energy * beta))
+    return 1.0 / (1.0 - np.exp(-(energy - mu) * beta))
+
+def fermi_function(energy, beta: float, mu: float=0.0):
+    """calculate the fermi function
+
+    Args:
+        energy (float or np.ndarray): the energy
+        beta (float): the inverse temperature
+        mu (float): the chemical potential. defaults to 0.
+
+    Returns:
+        float or np.ndarray: the fermi function
+    """
+    return 1.0 / (1.0 + np.exp((energy - mu) * beta))
 
 def get_spectral_function_from_exponentials(w, expn, etal):
     res = np.zeros_like(w, dtype=complex)
     for i in range(len(etal)):
         res += etal[i] / (expn[i] - 1.j * w)
     return res
-
 
 # spectral functions
 

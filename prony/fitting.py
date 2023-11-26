@@ -97,7 +97,7 @@ def optimize(C, d, A):
     b = numpy_to_cvxopt_matrix(np.zeros(C.size[0]))
     Q = C.T * C
     q = - d.T * C
-    
+     
     opts = {'show_progress': True, 'abstol': 1e-24, 'reltol': 1e-24, 'feastol': 1e-24}
     for k, v in opts.items():
         solvers.options[k] = v
@@ -106,5 +106,6 @@ def optimize(C, d, A):
     n_gamma = C.size[1] // 2
     omega_new_temp = np.array(sol['x']).reshape(2, n_gamma) 
     omega_new = omega_new_temp[0,:] + 1.j*omega_new_temp[1,:]
+ 
     
     return omega_new 

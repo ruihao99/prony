@@ -12,14 +12,17 @@ class TimeDomainData:
     The must need input are:
     - spectral_function: function object for the spectral function 
     - beta: the inverse temperature of the bath
+    - bath_statistic_function: The statistic functions. Could be the fermi or the bose function.
     """
 
     def __init__(
         self,
         spectral_function: Callable[[np.ndarray], np.ndarray],
+        bath_statistic_function: Callable[[np.ndarray], np.ndarray],
         beta: float,
-        tf: float = 200.0,
-        n_Hankel: int = 2000,
+        mu: float = 0.0,
+        tf: int = 20,
+        # n_Hankel: int = 2000,
         n_sample: int = 1000000,
         max_freq_in_pi: int = 3000,
     ):
@@ -28,8 +31,7 @@ class TimeDomainData:
         Args:
             spectral_function (Callable[[np.ndarray], np.ndarray]): the spectral function
             beta (float): the inverse temperature
-            tf (float, optional): time cutoff for the correlation function sampling. Defaults to 200.0.
-            n_Hankel (int, optional): Dimension of the Hankel matrix. Used here to estimate the sample rate. See class Hankel for details. Defaults to 2000.
+            tf (int, optional): This sets the time limit for sampling the correlation function. By default, it's set to 20. We suggest selecting a value that is a multiple of 10 seconds.
             n_sample (int, optional): number of evenly spaced frequency samples for the spectral function. Defaults to 1000000.
             max_freq_in_pi (int, optional): the maxium frequency to be considered in the spectral function. Defaults to 3000.
         """
@@ -37,14 +39,18 @@ class TimeDomainData:
         self.n_sample = n_sample
         self.max_freq_in_pi = max_freq_in_pi
         self.beta = beta
+        self.mu = mu
         self.tf = tf
-        self.n_Hankel = n_Hankel
+        
+        # This is an good choice 
+        self.n_Hankel = int(tf) * 10
         
         # discrete sample of the spectral function 
-        self.spectral = self.get_freq_domain_spectral(spectral_function)
+        self.omega, self.spectral_function = self.get_freq_domain_spectral(spectral_function)
+        
         
         # time domain correlation function data 
-        self.correlation_function = self.get_time_domain_correlation_function(*self.spectral)
+        self.time, self.correlation_function = self.get_time_domain_correlation_function(self.omega, self.spectral_function, bath_statistic_function)
         
     def __str__(self):
         return f"<TimeDomainData t0=0, tf={self.correlation_function[0][-1]}, beta={self.beta}>"
@@ -52,7 +58,7 @@ class TimeDomainData:
     def __repr__(self):
         return str(self) 
     
-    def get_freq_domain_spectral(self, spectral_function: Callable[[np.ndarray], np.ndarray]):
+    def get_freq_domain_spectral(self, spectral_function):
         """generate the spectral function samples
 
         Args:
@@ -66,7 +72,7 @@ class TimeDomainData:
         
         return (w, jw)
     
-    def get_time_domain_correlation_function(self, w, jw):
+    def get_time_domain_correlation_function(self, w, jw, bath_statistic_function):
         """generate time domain correlation function
 
         Args:
@@ -78,8 +84,8 @@ class TimeDomainData:
         """
         dw = w[1] - w[0]
         # correlation function in freq domain 
-        cw_pos = jw * bose_function(+w, self.beta)
-        cw_neg = jw * bose_function(-w, self.beta)
+        cw_pos = jw * bath_statistic_function(+w, beta=self.beta, mu=self.mu)
+        cw_neg = jw * bath_statistic_function(-w, beta=self.beta, mu=self.mu)
         # fix zero frequncy 
         cw_pos[0] = cw_pos[1]/2
         cw_neg[0] = cw_neg[1]/2
@@ -103,13 +109,13 @@ class TimeDomainData:
         
         You shall use this function to check whether the the `tf` parameter you have is long enough to ensure C(t) = 0 in the long time limit. 
         """
-        self.fig = self.plot_correlation_function(*self.correlation_function)
+        self.fig = self.plot_correlation_function(self.time, self.correlation_function)
         
     def get_correlation_function(self):
-        return self.correlation_function[1]
+        return self.correlation_function
 
     def get_time(self):
-        return self.correlation_function[0]
+        return self.time
 
     def get_n_Hankel(self):
         return self.n_Hankel
