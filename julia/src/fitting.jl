@@ -3,6 +3,9 @@ using SparseArrays
 using Polynomials
 using CVXOPT
 
+# for logging
+using Printf
+
 using AutomaticDocstrings
 
 """
@@ -165,18 +168,6 @@ function QP(Q::AbstractMatrix, G::AbstractMatrix, q::AbstractVector)
     # set up the upper bound for Gx
     h = zeros(size(G, 1))
 
-    # setting up the dummy boundaries
-    # lcon = fill(-Inf, size(A, 1))
-    # l = fill(-Inf, size(Q, 1))
-    # u = fill(+Inf, size(Q, 1))
-
-    # construct the quadratic problem using QuadraticModels.jl
-    # qmCSC = QuadraticModel(
-    #     q, QCSC, A = ACSC, lcon=lcon, ucon = b, lvar=l, uvar=u, c0 = 0.0, name = "QM_CSC"
-    # )
-
-    # solve the quadratic problem with RipQP.jl
-    # stats = ripqp(qmCSC)
     opts = Dict(
         "show_progress" => true, 
         "abstol" => 1e-24, 
@@ -233,8 +224,11 @@ function prony_fitting(data::TimeDomainData, nmode_real::Int, nmode_imag::Int, t
     @info "$H"
     @info "Solving for the gamma values from the eigen values..."
     time_roots = @elapsed gamma, t = get_gammas_and_t(H, nmode_real, nmode_imag)
-    @info "The gamma and t values are solved!"
-    @info "gamma: $gamma; t: $t."
+    @info """
+        The gamma and t values are solved!
+        - gamma: $gamma; 
+        -t: $t.
+    """
     @info "Preparing the matrices for Prony optimization..."
     C = get_gamma_matrix(H, gamma)
     d = get_correlation_function_matrix(data)
@@ -249,12 +243,12 @@ function prony_fitting(data::TimeDomainData, nmode_real::Int, nmode_imag::Int, t
     etaa = abs.(omega_new)
     expn = get_expn(data, t)
 
-    @info """
+    @info @sprintf "
     Time elapsed
-    - Hankel matrix and Takagi factorization: $(time_H)
-    - calculate the gamma and t by finding the polynomials roots: $(time_roots)
-    - The quadratic optimization: $(time_opt)
-    """
+    - Hankel matrix and Takagi factorization: %.4f seconds.
+    - calculate the gamma and t by finding the polynomials roots: %.4f seconds.
+    - The quadratic optimization: %.4f seconds.
+    " time_H time_roots time_opt
     return expn, etal
 end
 
@@ -265,7 +259,7 @@ A simple test function to use the julia prony fitting program.
 """
 function main()
     β = 1.0 / 10
-    data = TimeDomainData(BO, bose_function, β; tf=200)
+    data = TimeDomainData(BO, bose_function, β; tf=100)
     
     nmode_real = 1
     nmode_imag = 2
