@@ -1,0 +1,3 @@
+# the notebooks directory are just the examples on how to use this package
+# They are not not what this package is about. 
+*.ipynb linguist-vendored 
