@@ -19,6 +19,8 @@ from .spectral import BO
 from .spectral import get_spectral_function_from_exponentials
 from .spectral import bose_function
 
+from .deom import get_symmetrized_deom_inputs
+
 # for logging
 import structlog
 from .Timer import Timer
