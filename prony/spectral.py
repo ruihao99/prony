@@ -47,4 +47,4 @@ def BO(w, lams=1.0, zeta=1.0, omega_B=1.0):
     Returns:
         np.ndarray: the brownian motion spectral function
     """
-    return 2.0 * lams * w * omega_B**2 / ((w*zeta)**2 + (w**2 - omega_B**2)**2)
+    return 2.0 * lams * w * zeta * omega_B**2 / ((w*zeta)**2 + (w**2 - omega_B**2)**2)
