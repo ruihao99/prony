@@ -51,7 +51,7 @@ function get_correlation_spectra_from_exponentials(ω::Vector, exponents::Vector
 end
 
 """
-    BO(ω; λ = 1.0, ζ = 1.0, ΩB = 1.0)
+    BO(ω; λ = 1.0, ζ = 1.0, ΩB = 3.0)
 
 DOCSTRING
 
@@ -61,6 +61,6 @@ DOCSTRING
 - `ζ`: the secondary bath reorganalization energy
 - `ΩB`: the frequency of the solvation mode 
 """
-function BO(ω; λ::Float64=1.0, ζ::Float64=1.0, ΩB::Float64=1.0)
-    return 2.0 * λ * ω * ΩB^2 / ((ω * ζ)^2 + (ω^2 - ΩB^2)^2)
+function BO(ω; λ::Float64=1.0, ζ::Float64=1.0, ΩB::Float64=3.0)
+    return 2.0 * λ * ω * ΩB^2 * ζ/ ((ω * ζ)^2 + (ω^2 - ΩB^2)^2)
 end

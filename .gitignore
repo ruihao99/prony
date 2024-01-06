@@ -97,3 +97,5 @@ ENV/
 /data/
 /figures/
 /output/
+
+.DS_Store
