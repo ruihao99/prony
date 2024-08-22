@@ -20,6 +20,7 @@ class TimeDomainData:
         spectral_function: Callable[[np.ndarray], np.ndarray],
         bath_statistic_function: Callable[[np.ndarray], np.ndarray],
         beta: float,
+        is_fermi: bool = False,
         mu: float = 0.0,
         tf: int = 20,
         # n_Hankel: int = 2000,
@@ -41,6 +42,7 @@ class TimeDomainData:
         self.beta = beta
         self.mu = mu
         self.tf = tf
+        self.is_fermi = is_fermi    
         
         # This is an good choice 
         self.n_Hankel = int(tf) * 10
@@ -83,15 +85,28 @@ class TimeDomainData:
             (np.ndarray, np.ndarray): tuple of time and correlation function
         """
         dw = w[1] - w[0]
-        # correlation function in freq domain 
-        cw_pos = jw * bath_statistic_function(+w, beta=self.beta, mu=self.mu)
-        cw_neg = jw * bath_statistic_function(-w, beta=self.beta, mu=self.mu)
-        # fix zero frequncy 
-        cw_pos[0] = cw_pos[1]/2
-        cw_neg[0] = cw_neg[1]/2
         
-        # use Fourier transform to obtain time domain data
-        ct = dw / np.pi * (np.fft.fft(cw_pos) - np.fft.ifft(cw_neg)*len(cw_neg))
+        if not self.is_fermi: 
+            # correlation function in freq domain 
+            cw_pos = jw * bath_statistic_function(+w, beta=self.beta, mu=self.mu)
+            cw_neg = jw * bath_statistic_function(-w, beta=self.beta, mu=self.mu)
+            # fix zero frequncy 
+            cw_pos[0] = cw_pos[1]/2
+            cw_neg[0] = cw_neg[1]/2
+        
+            # use Fourier transform to obtain time domain data
+            ct = dw / np.pi * (np.fft.fft(cw_pos) - np.fft.ifft(cw_neg)*len(cw_neg))
+        else:
+            # correlation function in freq domain 
+            cw_pos = jw * bath_statistic_function(+w, beta=self.beta, mu=self.mu)
+            cw_neg = jw * bath_statistic_function(-w, beta=self.beta, mu=self.mu)
+            # fix zero frequncy 
+            cw_pos[0] = cw_pos[1]/2
+            cw_neg[0] = cw_neg[1]/2
+        
+            # use Fourier transform to obtain time domain data
+            ct = dw / np.pi * (np.fft.fft(cw_pos) + np.fft.ifft(cw_neg)*len(cw_neg))
+            
         time = 2.0 * np.pi * np.fft.fftfreq(len(ct), dw)
         
         # estimate the sample rate for the time domain correlation function
